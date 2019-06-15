@@ -1,0 +1,72 @@
+<h4>Formularios <small>data</small></h4>
+<hr />
+<form [formGroup]="forma" (ngSubmit)="guardarCambios()">
+  <div>
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Nombre</label>
+      <div class="col-8">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Nombre"
+          formControlName="nombre"
+          [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }"
+        />
+        <p
+          *ngIf="submitted && forma.controls['nombre'].errors"
+          class="text-danger"
+        >
+          El nombre es necesario
+        </p>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Apellido</label>
+      <div class="col-8">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Apellido"
+          formControlName="apellido"
+          [ngClass]="{ 'is-invalid': submitted && f.apellido.errors }"
+        />
+        <div *ngIf="submitted && f.apellido.errors" class="invalid-feedback">
+          <div *ngIf="f.apellido.errors.required">El apellido es necesario</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Correo</label>
+    <div class="col-md-8">
+      <input
+        class="form-control"
+        type="email"
+        placeholder="Correo electrónico"
+        formControlName="correo"
+        [ngClass]="{'is-invalid': submitted && f.correo.errors}"
+      />
+      <div *ngIf="submitted && f.correo.errors" class="invalid-feedback">
+        <div *ngIf="f.correo.errors.required">El correo es valido</div>
+        <div *ngIf="f.correo.errors.pattern">Escriba un correo valido</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row ">
+    <label class="col-2 col-form-label">&nbsp;</label>
+    <div class="input-group col-md-8">
+      <button type="submit" class="btn btn-outline-primary">
+        Guardar
+      </button>
+    </div>
+  </div>
+
+  {{ forma.valid }}
+</form>
+
+<!-- PATRON  -->
+<!-- /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i -->
+<!-- // -->
