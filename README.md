@@ -1,27 +1,66 @@
-# Forms
+# Validación formulario (Reactive Form)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.0.
+### Importación en el componente
 
-## Development server
+- FormGroup
+- FormControl
+- Validators
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Importación en el módulo
 
-## Code scaffolding
+- FormsModule
+- ReactiveFormsModule
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Ejemplo validación con clases de bootstrap 4 en template
 
-## Build
+<form [formGroup]="forma" (ngSubmit)="onSubmit()">
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+<input
+          class="form-control"
+          type="text"
+          placeholder="Nombre"
+          formControlName="nombre"
+          [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }"
+/>
 
-## Running unit tests
+ <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+          <div *ngIf="f.nombre.errors.required">El nombre es requerido</div>
+          <div *ngIf="f.nombre.errors.minlength">El nombre tiene que tener mínimo 5 letras</div>
+</div>
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Ejemplo en el componente 
 
-## Running end-to-end tests
+export class ReactiveComponent {
+  forma: FormGroup;
+  submitted = false;
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+  constructor() {
+    this.forma = new FormGroup({
+      nombre: new FormControl("", [Validators.required, Validators.minLength(5)]),
+      apellido: new FormControl("", Validators.required),
+      correo: new FormControl("", [Validators.required, Validators.pattern("^[^@]+@[^@]+\.[a-zA-Z]{2,}$")])
+    });
+  }
 
-## Further help
+  get f(){
+    return this.forma.controls
+  }
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  onSubmit() {
+    if (this.forma.invalid){
+      this.submitted = true;
+      return false;
+    } 
+    this.submitted = false;
+    console.log(this.forma.value);
+    console.log(this.forma);
+
+    this.forma.reset({
+      nombre: '',
+      apellido: '',
+      correo: '',
+    })
+
+  }
+}
+
